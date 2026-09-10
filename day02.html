@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>景区门票价格</title>
+</head>
+<body>
+    <h1>景区售票处</h1>
+    <script>
+        let age = Number(prompt("您的年龄是多少？"));
+        if (age < 6) {
+            alert("您 " + age + " 岁，票价：免费");
+        }else if (age <= 17) {
+            alert("您 " + age + " 岁，票价：半价 50 元");
+        }else if (age <= 59) {
+            alert("您 " + age + " 岁，票价：全价 100 元");
+        }else {
+            alert("您 " + age + " 岁，票价：老年票 30 元");
+        }
+    </script>
+</body>
+</html>
