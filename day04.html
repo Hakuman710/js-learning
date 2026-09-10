@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成绩统计器</title>
+</head>
+<body>
+    <h1>成绩统计器</h1>
+    <script>
+        let num = Number(prompt("您有几门课的成绩？"));
+        let 分数 = [];
+        for(let i = 1;i <= num;i++){
+            let m = Number(prompt("请输入第 " + i + " 门课成绩"));
+            分数.push(m);
+        }
+        let 总分 = 0;
+        let 最高分 = 分数[0];
+        let 最低分 = 分数[0];
+        let 成绩 = 分数.join(","); 
+        for(let i = 0;i < 分数.length;i++){
+            if(分数[i] > 最高分){
+                最高分 = 分数[i];
+            }else if(分数[i] < 最低分){
+                最低分 = 分数[i];
+            }
+            总分 = 总分 + 分数[i];
+        }
+        let 平均分 = 总分/分数.length;
+        console.log("成绩：" + 成绩);
+        console.log("总分：" + 总分);
+        console.log("平均分：" + 平均分);
+        console.log("最高分：" + 最高分);
+        console.log("最低分：" + 最低分);
+    </script>
+</body>
+</html>
