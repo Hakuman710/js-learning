@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>九九乘法表</title>
+</head>
+<body>
+    <h1>九九乘法表</h1>
+    <div id="表格"></div>
+
+    <script>
+        let 容器 = document.getElementById("表格");
+        let 全部内容 = "";
+
+        for(let i = 1;i<=9;i++){
+            for(let j = 1;j<=i;j++){
+                全部内容 += j + "×" + i + "=" + j*i + "  ";
+            }
+            全部内容 += "<br>";
+        }
+
+        容器.innerHTML = 全部内容;
+    </script>
+</body>
+</html>
