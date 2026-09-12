@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>九九乘法表</title>
+    <style>
+        #表格 {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .item {
+            box-sizing: border-box;
+            display: inline-block;
+            background-color: lightskyblue;
+            padding: 6px 6px;
+            margin: 3px;
+            border-radius: 10px;
+            width: 90px;
+            text-align: center;
+            transition: background-color 0.2s;
+        }
+        .item:hover {
+            background-color:greenyellow;
+        }
+    </style>
+</head> 
+<body>
+    <h1>九九乘法表</h1>
+    <div id="表格"></div>
+    <script>
+        let 容器 = document.getElementById("表格");
+        let 全部内容 = "";
+        for(let i = 1;i<=9;i++){
+            for(let j = 1;j<=i;j++){
+                全部内容 += '<span class = "item">' + j +"×" + i + "=" + j*i + '</span>';
+            }
+        }
+        容器.innerHTML = 全部内容;
+    </script>
+</body>
+</html>
