@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乘法表生成器</title>
+    <style>
+        #表格 {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .item {
+            box-sizing: border-box;
+            width: 90px;
+            display: inline-block;
+            background-color: skyblue;
+            padding: 5px 5px;
+            margin: 5px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .控制区 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>乘法表生成器</h1>
+    <div class="控制区">
+        请输入范围：
+        <input id="范围" type="number">
+        <button id="生成按钮">生成</button>
+    </div>
+    <div id="表格"></div>
+    <script>
+        let 容器 = document.getElementById("表格");
+        let number = document.getElementById("范围");
+        let 按钮 = document.getElementById("生成按钮");
+        按钮.addEventListener("click",function(){
+            let 全部内容 = "";
+            let n = Number(number.value);
+            if(n < 1){
+                alert("请输入 1 以上的数字");
+                return;
+            }
+            for(let i = 1;i<=n;i++){
+                for(let j = 1;j<=i;j++){
+                    全部内容 += '<span class = "item">' + j + "×" + i + "=" + j*i + '</span>';
+                }
+                全部内容 += "<br>";
+            }
+            容器.innerHTML = 全部内容;
+        })
+    </script>
+</body>
+</html>
