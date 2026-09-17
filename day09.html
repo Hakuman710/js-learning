@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>待办清单</title>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .输入区 { 
+            display: flex; 
+            gap: 8px; 
+            margin-bottom: 16px; 
+        }
+        #输入框 {
+            flex: 1;
+            padding: 10px;
+            font-size: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 15px;
+            border: none;
+            border-radius: 6px;
+            background: #4caf50;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover { background: #388e3c; }
+
+        .待办项 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            background: #f5f5f5;
+            border-radius: 6px;
+        }
+        .待办内容 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .删除按钮 {
+            background: #e53935;
+            padding: 4px 12px;
+            font-size: 13px;
+        }
+        .已完成 {
+            text-decoration: line-through;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <h1>待办清单</h1>
+    <div class="输入区">
+        <input id="输入框" type="text" placeholder="输入待办事项...">
+        <button id="添加按钮">添加</button>
+    </div>
+    <div id="统计"></div>
+    <div id="列表"></div>
+    <script>
+        let 待办列表 = JSON.parse(localStorage.getItem("待办")) || [];
+        let 输入框 = document.getElementById("输入框");
+        let 添加按钮 = document.getElementById("添加按钮");
+        let 列表容器 = document.getElementById("列表");
+        function 保存(){
+            localStorage.setItem("待办",JSON.stringify(待办列表));
+        }
+        function 删除(下标){
+            待办列表.splice(下标,1);
+            保存();
+            渲染();
+        }
+        function 勾选(下标){
+            待办列表[下标].完成 = !待办列表[下标].完成;
+            保存();
+            渲染();
+        }
+        function 渲染() {
+            let 内容 = "";
+            let 已完成数 = 0;
+            for (let i = 0;i < 待办列表.length;i++){
+                let 完成类 = 待办列表[i].完成 ? "已完成":"";
+                let 勾选状态 = 待办列表[i].完成 ? "checked":"";
+                if(待办列表[i].完成) 已完成数++;
+                内容 += `
+                <div class="待办项">
+                    <label class="待办内容">
+                        <input type="checkbox" onclick="勾选(${i})" ${勾选状态}>
+                        <span class="${完成类}">${待办列表[i].文字}</span>
+                    </label>
+                    <button class="删除按钮" onclick="删除(${i})">删除</button>
+                </div>
+                `;
+            }
+            document.getElementById("统计").innerText 
+            = "已完成" + 已完成数 + " / 共" + 待办列表.length; 
+            列表容器.innerHTML = 内容;
+        }
+        添加按钮.addEventListener("click",function(){
+            let 内容 = 输入框.value;
+            if(内容 === "") return;
+            待办列表.push({文字:内容,完成:false});
+            输入框.value = "";
+            保存();
+            渲染();
+        })
+        渲染();
+    </script>
+</body>
+</html>
