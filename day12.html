@@ -177,7 +177,7 @@
                 return `
                 <div class="待办项">
                     <label class="待办内容">
-                        <input type="checkbox" onclick="勾选(${这条.id})" ${这条.完成 ? "checked":""}>
+                        <input type="checkbox" onchange="勾选(${这条.id})" ${这条.完成 ? "checked":""}>
                         <span class="${这条.完成 ? "已完成":""}">${这条.文字}</span>
                     </label>
                     <div class="按钮区">
