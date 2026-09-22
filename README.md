@@ -15,6 +15,7 @@
 - 2026-09-17 第 9 天：对象、模板字符串、`<label>`
 - 2026-09-19 第 10 天：数组方法 `map` / `filter` / `forEach`
 - 2026-09-19 第 11 天：`findIndex`、数据加唯一 `id`、编辑功能、`prompt` 默认值
+- 2026-09-19 第 12 天：`data-` 属性、`querySelectorAll` + `forEach` 绑事件、筛选功能
 
 ## 文件
 
@@ -33,3 +34,4 @@
 | `day09.html` | 对象 + 模板字符串：待办清单（完成状态、统计） |
 | `day10.html` | 数组方法：用 `map`/`filter`/`forEach` 重构待办清单 |
 | `day11.html` | 唯一 id + `findIndex`：待办清单加编辑功能 |
+| `day12.html` | `data-` 属性 + 筛选：待办清单加"全部/未完成/已完成" |
