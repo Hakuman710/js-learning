@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>练习页</title>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .输入区 { 
+            display: flex; 
+            gap: 8px; 
+            margin-bottom: 16px; 
+        }
+        #输入框 {
+            flex: 1;
+            padding: 10px;
+            font-size: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        #添加按钮 {
+            padding: 10px 20px;
+            font-size: 15px;
+            border: none;
+            border-radius: 6px;
+            background: #4caf50;
+            color: #fff;
+            cursor: pointer;
+        }
+        .待办按钮 {
+            padding: 10px 20px;
+            font-size: 15px;
+            border: none;
+            border-radius: 6px;
+            background: #4caf50;
+            color: #fff;
+            cursor: pointer;
+        }
+        #搜索框 {
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        button:hover { background: #388e3c; }
+
+        .按钮区 {
+            display: flex;
+            gap: 6px;
+        }
+        .待办项 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            background: #f5f5f5;
+            border-radius: 6px;
+        }
+        .待办内容 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .待办内容 span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .编辑按钮 {
+            background: #4caf50;
+            padding: 4px 12px;
+            font-size: 13px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .删除按钮 {
+            background: #e53935;
+            padding: 4px 12px;
+            font-size: 13px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .筛选按钮 {
+            padding: 6px 14px;
+            font-size: 13px;
+            background: #ddd;
+            color: #333;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .已完成 {
+            text-decoration: line-through;
+            color: #999;
+        }
+        .筛选按钮.选中 {
+            background: #4caf50;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h1>待办清单</h1>
+    <div class="输入区">
+        <input id="输入框" type="text" placeholder="输入待办事项...">
+        <button id="添加按钮">添加</button>
+    </div>
+    <div class="搜索区">
+        <input id="搜索框" type="text" placeholder="搜索待办...">
+    </div>
+    <div id="筛选区">
+        <button data-筛选="全部" class="筛选按钮 选中">全部</button>
+        <button data-筛选="未完成" class="筛选按钮">未完成</button>
+        <button data-筛选="已完成" class="筛选按钮">已完成</button>
+    </div>
+    <div id="统计"></div>
+    <div id="列表"></div>
+    <script>
+        let 待办列表 = JSON.parse(localStorage.getItem("待办")) || [];
+        let 输入框 = document.getElementById("输入框");
+        let 添加按钮 = document.getElementById("添加按钮");
+        let 列表容器 = document.getElementById("列表");
+        let 搜索框 = document.getElementById("搜索框");
+        let 搜索词 = "";
+        let 当前筛选 = "全部";
+        document.querySelectorAll(".筛选按钮").forEach(function(按钮){
+            按钮.addEventListener("click",function(){
+                当前筛选 = 按钮.dataset.筛选;
+                切换按钮高亮(按钮);
+                渲染();
+            });
+        });
+        function 切换按钮高亮(选中的按钮){
+            document.querySelectorAll(".筛选按钮").forEach(function(按钮){
+                按钮.classList.remove("选中");
+            });
+            选中的按钮.classList.add("选中");
+        };
+        function 保存(){
+            localStorage.setItem("待办",JSON.stringify(待办列表));
+        }
+        function 删除(id){
+            let 位置 = 待办列表.findIndex(function(这条){
+                return 这条.id === id;
+            });
+            if(位置 === -1) return;
+            待办列表.splice(位置,1);
+            保存();
+            渲染();
+        }
+        function 勾选(id){
+            let 位置 = 待办列表.findIndex(function(这条){
+                return 这条.id === id;
+            });
+            if(位置 === -1) return;
+            待办列表[位置].完成 = !待办列表[位置].完成;
+            保存();
+            渲染();
+        }
+        function 编辑(id){
+            let 位置 = 待办列表.findIndex(function(这条){
+                return 这条.id === id;
+            });
+            if(位置 === -1) return;
+            let 新内容 = prompt("修改内容：",待办列表[位置].文字);
+            if(新内容 === null) return;
+            if(新内容.trim() === "") return;
+            待办列表[位置].文字 = 新内容.trim();
+            保存();
+            渲染();
+        }
+        function 渲染(){
+            let 显示 = 待办列表.filter(function(这条){
+                if(当前筛选 === "未完成" && 这条.完成 === true) 
+                return false;
+                if(当前筛选 === "已完成" && 这条.完成 === false) 
+                return false;
+                if(搜索词 !== "" && !这条.文字.toLowerCase().includes(搜索词.toLowerCase())){
+                    return false;
+                }
+                return true;
+            });
+            let 内容 = 显示.map(function(这条,i){
+                return `
+                <div class="待办项">
+                    <label class="待办内容">
+                        <input type="checkbox" onchange="勾选(${这条.id})" ${这条.完成 ? "checked":""}>
+                        <span class="${这条.完成 ? "已完成":""}">${这条.文字}</span>
+                    </label>
+                    <div class="按钮区">
+                        <button class="待办按钮 编辑按钮" onclick="编辑(${这条.id})">编辑</button>
+                        <button class="待办按钮 删除按钮" onclick="删除(${这条.id})">删除</button>
+                    </div>
+                </div>
+                `;
+            }).join("");
+            let 已完成数 = 0;
+            待办列表.forEach(function(这条){
+                if(这条.完成) 已完成数++;
+            })
+            document.getElementById("统计").innerText 
+            = "已完成" + 已完成数 + " / 共" + 待办列表.length; 
+            列表容器.innerHTML = 内容;
+        }
+        添加按钮.addEventListener("click",function(){
+            let 内容 = 输入框.value;
+            if(内容 === "") return;
+            待办列表.push({
+                id:Date.now(),
+                文字:内容,
+                完成:false
+            });
+            输入框.value = "";
+            保存();
+            渲染();
+        });
+        搜索框.addEventListener("change",function(){
+            搜索词 = 搜索框.value.trim();
+            渲染();
+        })
+        渲染();
+    </script>
+</body>
+</html>
